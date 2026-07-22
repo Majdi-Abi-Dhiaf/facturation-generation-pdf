@@ -11,7 +11,7 @@
     .quote-title { text-align: right; }
     .quote-title h1 { font-size: 20px; margin: 0; color: {{ primary_color }}; }
     .quote-status { display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 3px;
-                    font-size: 9px; font-weight: bold; background: #eee; color: #555; }
+                    font-size: 9px; font-weight: bold; background: #eee; color: {{ secondary_color|default('#333333') }}; }
 
     .meta { display: flex; justify-content: space-between; margin: 20px 0; padding: 10px 0;
             border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
@@ -28,14 +28,14 @@
     .totals .total-ttc { font-weight: bold; font-size: 14px; border-top: 1px solid #000; padding-top: 8px; margin-top: 4px; }
 
     .conditions { margin-top: 30px; }
-    .conditions h3 { font-size: 11px; margin-bottom: 6px; color: {{ primary_color }}; }
+    .conditions h3 { font-size: 11px; margin-bottom: 6px; color: {{ secondary_color|default('#333333') }}; }
     .conditions p { font-size: 9px; line-height: 1.5; color: #555; margin: 2px 0; }
 
     .signature { display: flex; justify-content: space-between; margin-top: 40px; }
     .signature .block { width: 45%; }
-    .signature .line { border-top: 1px solid #999; margin-top: 40px; padding-top: 4px; font-size: 9px; color: #777; }
+    .signature .line { border-top: 1px solid {{ secondary_color|default('#333333') }}; margin-top: 40px; padding-top: 4px; font-size: 9px; color: #777; }
 
-    .legal { margin-top: 30px; font-size: 8px; color: #777; }
+    .legal { margin-top: 30px; font-size: 8px; color: {{ secondary_color|default('#777777') }}; }
 </style>
 </head>
 <body>

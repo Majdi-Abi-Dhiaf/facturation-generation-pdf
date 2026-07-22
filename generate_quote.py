@@ -2,13 +2,18 @@ from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 import os
 from config import OUTPUT_DIR
+from personalization import appliquer_personnalisation
 
 
 def generate_quote_pdf(data: dict, filename: str = "devis.pdf") -> str:
-    """
-    Génère un PDF de devis à partir d'un dictionnaire de données.
-    Un seul taux de TVA global (cohérent avec le template facture).
-    """
+    # Valide et traite le logo + les couleurs avant de les injecter dans le template
+    perso = appliquer_personnalisation(
+        logo_path=data.get("logo_path"),
+        couleur_primaire=data.get("primary_color", "#1D9E75"),
+        couleur_secondaire=data.get("secondary_color", "#333333"),
+    )
+    data = {**data, **perso}
+
     env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template("devis.html")
 
@@ -36,6 +41,7 @@ if __name__ == "__main__":
         "company_vat_number": None,
         "logo_path": None,
         "primary_color": "#1D9E75",
+        "secondary_color": "#555555",
         "quote_number": "D-2026-0087",
         "quote_status": "En attente",
         "issue_date": "20/07/2026",
