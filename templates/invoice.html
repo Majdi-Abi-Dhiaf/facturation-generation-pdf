@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page { size: A4; margin: 20mm; }
+    body { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #222; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .header img { max-height: 60px; }
+    .company-info p, .invoice-title p { margin: 2px 0; }
+    .invoice-title { text-align: right; }
+    .invoice-title h1 { font-size: 20px; margin: 0; color: {{ primary_color }}; }
+    .meta { display: flex; justify-content: space-between; margin: 20px 0; padding: 10px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+    table.items { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table.items th { background: {{ primary_color }}; color: #fff; text-align: left; padding: 8px; }
+    table.items td { padding: 8px; border-bottom: 1px solid #eee; }
+    table.items th:nth-child(2), table.items td:nth-child(2),
+    table.items th:nth-child(3), table.items td:nth-child(3),
+    table.items th:nth-child(4), table.items td:nth-child(4) { text-align: right; }
+    .totals { width: 250px; margin-left: auto; margin-top: 15px; }
+    .totals div { display: flex; justify-content: space-between; padding: 4px 0; }
+    .totals .total-ttc { font-weight: bold; font-size: 14px; border-top: 1px solid #000; padding-top: 8px; }
+    .legal { margin-top: 40px; font-size: 8px; color: #777; }
+</style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="company-info">
+            {% if logo_path %}<img src="{{ logo_path }}">{% endif %}
+            <p><strong>{{ company_name }}</strong></p>
+            <p>SIRET {{ company_siret }}</p>
+            <p>{{ company_address }}</p>
+        </div>
+        <div class="invoice-title">
+            <h1>FACTURE</h1>
+            <p>N° {{ invoice_number }}</p>
+        </div>
+    </div>
+
+    <div class="meta">
+        <div>
+            <p><strong>Facturé à</strong></p>
+            <p>{{ client_name }}</p>
+            <p>{{ client_address }}</p>
+        </div>
+        <div style="text-align: right;">
+            <p><strong>Date d'émission</strong> : {{ issue_date }}</p>
+            <p><strong>Échéance</strong> : {{ due_date }}</p>
+        </div>
+    </div>
+
+    <table class="items">
+        <thead>
+            <tr><th>Description</th><th>Qté</th><th>Prix unitaire</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.description }}</td>
+                <td>{{ item.qty }}</td>
+                <td>{{ "%.2f"|format(item.unit_price) }} €</td>
+                <td>{{ "%.2f"|format(item.qty * item.unit_price) }} €</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="totals">
+        <div><span>Sous-total HT</span><span>{{ "%.2f"|format(subtotal) }} €</span></div>
+        <div><span>TVA ({{ (vat_rate * 100)|int }}%)</span><span>{{ "%.2f"|format(vat_amount) }} €</span></div>
+        <div class="total-ttc"><span>Total TTC</span><span>{{ "%.2f"|format(total_ttc) }} €</span></div>
+    </div>
+
+    {% if legal_mentions %}
+    <div class="legal">{{ legal_mentions }}</div>
+    {% endif %}
+
+</body>
+</html>
